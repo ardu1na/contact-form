@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 
 class Message(models.Model):
@@ -8,9 +9,14 @@ class Message(models.Model):
     telefono = models.CharField(max_length=50)
     fecha = models.DateTimeField(auto_now_add=True)
 
+    leido = models.BooleanField(default=False)
+    spam = models.BooleanField(default=False)
+    eliminado = models.BooleanField(default=False)
+
     class Meta:
         verbose_name = "Mensaje"
         verbose_name_plural = "Mensajes"
 
     def __str__ (self):
-        return f'{self.asunto} | {self.fecha} | Mensaje de {self.nombre}'
+        time = self.fecha.strftime("%d/%m/%Y %X")
+        return f' Mensaje de {self.nombre} | {self.asunto} | {time}'
