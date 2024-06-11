@@ -1,0 +1,3 @@
+- add read boolean to admin
+- make the endpoint for reading etc
+- make the fe for the admin

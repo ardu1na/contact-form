@@ -1,0 +1,8 @@
+
+###
+
+
+POST http://127.0.0.1:8000/vimacon/new-message/
+Content-Type: application/json
+
+{ "asunto": "hola","texto":"qué tal este es un text dle endpoint de mensajes","nombre":"tester", "email":"tester@gmail.com","telefono":"4492281" }
