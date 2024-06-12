@@ -6,7 +6,6 @@ class Message(models.Model):
     texto = models.TextField()
     nombre = models.CharField(max_length=100)
     email = models.EmailField()
-    telefono = models.CharField(max_length=50)
     fecha = models.DateTimeField(auto_now_add=True)
 
     leido = models.BooleanField(default=False)

@@ -1,4 +1,2 @@
-- add read boolean to admin
-- make the endpoint for reading etc
 - make the fe for the admin
-- formatear fechayhora del endpoint y del admin
+- en el formulario de contacto añadir animaciones y bloquear una vez enviado

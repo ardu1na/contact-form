@@ -28,7 +28,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ('asunto', 'texto', 'nombre', 'email', 'telefono', 'address')
+        fields = ('asunto', 'texto', 'nombre', 'email',  'address')
 
 
 class InboxSerializer(serializers.ModelSerializer):
@@ -45,7 +45,7 @@ class MessageAdminSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ('asunto', 'texto', 'nombre', 'email', 'telefono','date','leido','spam','eliminado')
+        fields = ('asunto', 'texto', 'nombre', 'email','date','leido','spam','eliminado')
 
     def get_date(self, obj):
         return get_formatted_date(obj.fecha)
