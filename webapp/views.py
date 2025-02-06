@@ -1,7 +1,9 @@
 from rest_framework import serializers, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .models import Client, Piece, Product, Budget
+from decimal import Decimal
+
+from webapp.models import Client, Piece, Product, Budget
 
 # Serializers
 
@@ -22,10 +24,11 @@ class ProductSerializer(serializers.ModelSerializer):
 class BudgetSerializer(serializers.ModelSerializer):
     total_q = serializers.ReadOnlyField()
     total = serializers.ReadOnlyField()
-    
+    net_total = serializers.ReadOnlyField()
+
     class Meta:
         model = Budget
-        fields = ['id', 'client', 'product', 'area', 'discount', 'total_q', 'total']
+        fields = ['id', 'client', 'product', 'area', 'discount', 'total_q', 'total', 'net_total']
 
 
 # Views
@@ -82,8 +85,10 @@ class BudgetViewSet(viewsets.ModelViewSet):
         
         total_q = product.pps * int(area)
         total = total_q * product.price
-        
+        #net_total = product.net_total
+
         return Response({
             'total_q': total_q,
-            'total': total
+            'total': total,
+            #'net_total': net_total
         })

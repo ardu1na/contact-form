@@ -3,6 +3,8 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from vimacon import views as vimaconviews
 from rest_framework.routers import DefaultRouter
+from django.conf import settings
+from django.conf.urls.static import static
 
 from webapp.views import PieceViewSet, ProductViewSet, BudgetViewSet
 
@@ -14,6 +16,7 @@ router.register(r'budgets', BudgetViewSet)
 
 
 urlpatterns = [
+    
     path('admin/', admin.site.urls),
     path('api/vimacon/new-message/', vimaconviews.MessageCreateAPIView.as_view(), name='new-message'),
     path('api/vimacon/', include('vimacon.urls'), name="inbox"),
@@ -23,4 +26,6 @@ urlpatterns = [
     path('api/products/sizes/', ProductViewSet.as_view({'get': 'sizes'}), name='product-sizes'),
     path('api/products/colors/', ProductViewSet.as_view({'get': 'colors'}), name='product-colors'),
     path('api/budgets/calculate_budget/', BudgetViewSet.as_view({'post': 'calculate_budget'}), name='calculate-budget'),
-]
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
