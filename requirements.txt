@@ -2,3 +2,25 @@
 Django==5.0.4
 django-cors-headers==4.3.1
 djangorestframework==3.15.1
+
+
+<div class="row align-items-center justify-content-center">
+	<div class="col-12 col-md-6">
+		<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3194.9493542005757!2d-4.104965325118492!	3d36.79576467224843!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd72472d1b9a6c5b%3A0x41da7bc3d663e714!2sDiseminado%20Real%20Alto%2C%20480%2C%2029700%2C%20M%C3%A1laga%2C%20Espa%C3%B1a!5e0!3m2!1ses-419!2sar!4v1724002027597!5m2!1ses-419!2sar" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+	</div>
+	
+	<div class="col-12 col-md-6 my-4">
+		<div class="card border-0 shadow rounded py-5 px-2 px-md-5">
+			<h5 class="fuente1 text-danger">ENCONTRANOS EN</H5>
+			
+			<p> <i class="bi bi-geo-alt-fill text-danger me-2"></i>Diseminado Real Alto, 480, 9700 Vélez-Málaga </p>
+			
+			<p>    <i class="bi bi-telephone-fill text-danger me-2"></i> + 34 66 564 1332 </p>
+			
+						<p><i class="bi bi-envelope  me-2 text-danger"></i> <a href="mailto:vimacon.barro@gmail.com" target="_blank" class="text-decoration-none text-primary text-primary fw-2"><strong>vimacon.barro@gmail.com</strong></a></p>
+						
+						<p>    <a class="text-decoration-none text-danger fw-bold" href="https://www.facebook.com/profile.php?id=100087180025124" target="_blank"><i class="bi bi-facebook text-danger fs-1 me-2"></i> </a> <a class="text-decoration-none text-dark fw-bold" href="https://www.instagram.com/suelos_de_barro_artesanal" target="_blank"><i class="bi bi-instagram fs-1 text-danger me-2"></i> </a></p>
+
+		</div>
+	</div>
+</div>

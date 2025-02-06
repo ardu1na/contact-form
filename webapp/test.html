@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Presupuesto API</title>
+</head>
+<body>
+    <h2>Seleccionar Pieza</h2>
+    <select id="pieceSelect" onchange="loadSizes()">
+        <option value="">Seleccione una pieza</option>
+    </select>
+    
+    <h2>Seleccionar Tamaño</h2>
+    <select id="sizeSelect" onchange="loadColors()" disabled>
+        <option value="">Seleccione un tamaño</option>
+    </select>
+    
+    <h2>Seleccionar Color</h2>
+    <select id="colorSelect" disabled>
+        <option value="">Seleccione un color</option>
+    </select>
+    
+    <h2>Ingresar Área</h2>
+    <input type="number" id="area" placeholder="Área en m²" disabled>
+    
+    <button onclick="calculateBudget()" disabled>Calcular Presupuesto</button>
+    
+    <h3>Resultado:</h3>
+    <p id="result"></p>
+    
+    <script>
+        async function loadPieces() {
+            const response = await fetch('http://localhost:8000/api/pieces/');
+            const data = await response.json();
+            const pieceSelect = document.getElementById('pieceSelect');
+            
+            data.forEach(piece => {
+                let option = document.createElement('option');
+                option.value = piece.id;
+                option.textContent = piece.name;
+                pieceSelect.appendChild(option);
+            });
+        }
+
+        async function loadSizes() {
+            const pieceId = document.getElementById('pieceSelect').value;
+            if (!pieceId) return;
+            
+            const response = await fetch(`http://localhost:8000/api/products/sizes/?piece_id=${pieceId}`);
+            const data = await response.json();
+            const sizeSelect = document.getElementById('sizeSelect');
+            sizeSelect.innerHTML = '<option value="">Seleccione un tamaño</option>';
+            sizeSelect.disabled = false;
+            
+            data.sizes.forEach(size => {
+                let option = document.createElement('option');
+                option.value = size;
+                option.textContent = size;
+                sizeSelect.appendChild(option);
+            });
+        }
+
+        async function loadColors() {
+            const pieceId = document.getElementById('pieceSelect').value;
+            const size = document.getElementById('sizeSelect').value;
+            if (!pieceId || !size) return;
+            
+            const response = await fetch(`http://localhost:8000/api/products/colors/?piece_id=${pieceId}&size=${size}`);
+            const data = await response.json();
+            const colorSelect = document.getElementById('colorSelect');
+            colorSelect.innerHTML = '<option value="">Seleccione un color</option>';
+            colorSelect.disabled = false;
+            
+            data.colors.forEach(color => {
+                let option = document.createElement('option');
+                option.value = color;
+                option.textContent = color;
+                colorSelect.appendChild(option);
+            });
+            document.getElementById('area').disabled = false;
+            document.querySelector('button').disabled = false;
+        }
+
+        async function calculateBudget() {
+            const pieceId = document.getElementById('pieceSelect').value;
+            const size = document.getElementById('sizeSelect').value;
+            const color = document.getElementById('colorSelect').value;
+            const area = document.getElementById('area').value;
+            
+            if (!pieceId || !size || !color || !area) return;
+            
+            const response = await fetch('http://localhost:8000/api/budgets/calculate_budget/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ piece_id: pieceId, size, color, area })
+            });
+            
+            const data = await response.json();
+            document.getElementById('result').innerText = response.ok ? 
+                `Total de piezas: ${data.total_q}\nTotal en euros: ${data.total}` : 
+                `Error: ${data.error}`;
+        }
+        
+        loadPieces();
+    </script>
+</body>
+</html>

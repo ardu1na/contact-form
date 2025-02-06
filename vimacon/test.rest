@@ -2,16 +2,29 @@
 ###
 
 
-POST http://127.0.0.1:8000/api/vimacon/new-message/
+POST https://www.ardu1na.com.ar/api/login
 Content-Type: application/json
 
-{ "asunto": "hola","texto":"qué tal este es un text dle endpoint de mensajes","nombre":"tester", "email":"tester@gmail.com","telefono":"4492281","honeypot":"aqui" }
+{ "username": "lagopuelo","password":"digesto@2025"}
 
 ###
 
 
-POST http://127.0.0.1:8000/api/vimacon/logout/
+POST https://www.ardu1na.com.ar/api/digestopuelo/add/
+Content-Type: application/json
+Authorization: token d09e03b85901a29DSFSFS31c5f9d7c43af457df7bdb319
+
+{
+    "tipo": "ORDENANZA",
+    "numero": "009/24",
+    "titulo": "Oferta publica para venta dos terrenos paseo comercial",
+    "archivo": "https://drive.google.com/file/d/1_m0i7qRkp0aazg5z04jZkTNAdA806vWD/view?usp=drivesdk"
+  }
+
+###
+
+
+GET https://www.ardu1na.com.ar/api/digestopuelo/last/
 Content-Type: application/json
 
-{ "id":1 }
 
