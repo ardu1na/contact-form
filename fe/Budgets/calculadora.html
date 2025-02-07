@@ -33,6 +33,15 @@
             width: 250px;
             margin: 10px;
         }
+        .size-btn {
+            margin: 5px;
+            padding: 8px 12px;
+            font-size: 16px;
+        }
+        .loading {
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
 
 </head>
@@ -41,6 +50,34 @@
         <div class="row align-items-center justify-content-center bg-white m-0 p-4">
             <h3 class="text-dark pt-3">Piezas</h3>
             <div id="pieceContainer" class="row d-flex flex-wrap justify-content-center p-4"></div>
+
+            <!-- Contenedor de detalles de la pieza -->
+            <div id="pieceDetailContainer" class="row align-items-center justify-content-center d-none p-4">
+                <div class="col-12 col-md-4 text-center">
+                    <img id="selected-piece-img" class="img-fluid">
+                </div>
+                <div class="col-12 col-md-8">
+                    <h3>Medidas disponibles</h3>
+                    <h5>Altura - Anchura - Grosor</h5>
+                    <div id="sizes-piece" class="d-flex flex-wrap"></div>
+                </div>
+                <div class="col-12 text-center mt-4">
+                    <button id="go-back-btn" class="btn btn-danger rounded">Volver</button>
+                </div>
+            </div>
+
+            <!-- Loading indicator -->
+            <div id="loading-indicator" class="loading d-none">
+                <p>Cargando...</p>
+            </div>
+
+            <!-- Budget result section -->
+            <div id="result" class="mt-4 text-center d-none">
+                <h4>Resultado del Presupuesto:</h4>
+                <p id="total-pieces"></p>
+                <p id="total-price"></p>
+                <p id="net-price"></p>
+            </div>
         </div>
     </div>
 
@@ -49,55 +86,120 @@
 
     <!-- View-1 scripts -->
     <script>
-    async function loadPieces() {
-        const response = await fetch('http://localhost:8000/api/pieces/');
-        const data = await response.json();
-        const pieceContainer = document.getElementById('pieceContainer');
+        let selectedPiece = null;
+        let selectedSize = '';
+        let selectedColor = '';
+
+        async function loadPieces() {
+            document.getElementById("loading-indicator").classList.remove("d-none"); // Show loading indicator
+
+            const response = await fetch('http://localhost:8000/api/pieces/');
+            const data = await response.json();
+            const pieceContainer = document.getElementById('pieceContainer');
+            
+            pieceContainer.innerHTML = ''; // Limpiar contenido previo
+
+            // Añadir cada pieza como una columna de Bootstrap
+            data.forEach(piece => {
+                let pieceDiv = document.createElement('div');
+                pieceDiv.className = "p-2 col-3 text-center";
+
+                let img = document.createElement('img');
+                img.src = `${piece.image}`;
+                img.alt = piece.name;
+                img.className = "piece-img img-fluid";
         
-        pieceContainer.innerHTML = ''; // Limpiar contenido previo
+                img.onclick = () => selectPiece(piece);
+        
+                pieceDiv.appendChild(img);
+                pieceContainer.appendChild(pieceDiv);
+            });
 
-        // Añadir cada pieza como una columna de Bootstrap
-        data.forEach(piece => {
-            let pieceDiv = document.createElement('div');
-            pieceDiv.className = "p-2 col-3 text-center";
+            // Agregar la imagen del logo como la última columna
+            let logoDiv = document.createElement('div');
+            logoDiv.className = "p-2 col-3 text-center";
 
-            let img = document.createElement('img');
-            img.src = `${piece.image}`; // Asegúrate de que la URL sea correcta
-            img.alt = piece.name;
-            img.className = "piece-img img-fluid";
+            let logoImg = document.createElement('img');
+            logoImg.src = "https://www.vimacon.com/wp-content/uploads/2024/08/logovimacon.png"; 
+            logoImg.alt = "VIMACON Suelos de barro artesanal";
+            logoImg.className = "logo-img img-fluid";
+
+            logoDiv.appendChild(logoImg);
+            pieceContainer.appendChild(logoDiv);
+
+            document.getElementById("loading-indicator").classList.add("d-none"); // Hide loading indicator
+        }
+        
+        async function selectPiece(piece) {
+    // Hide the piece selection and show the details
+    document.getElementById("pieceContainer").classList.add("d-none");
+    document.getElementById("pieceDetailContainer").classList.remove("d-none");
+
+    // Show the selected piece's image
+    document.getElementById("selected-piece-img").src = piece.image;
+
+    // Get and display the available sizes for the selected piece
+    const response = await fetch(`http://localhost:8000/api/products/sizes/?piece_id=${piece.id}`);
+    const data = await response.json();
+    console.log(data);  // Log the response to see the structure
     
-            img.onclick = () => selectPiece(img, piece.id);
-    
-            pieceDiv.appendChild(img);
-            pieceContainer.appendChild(pieceDiv);
+    // Access the 'sizes' array directly
+    const sizes = data.sizes;  // data.sizes is already an array
+
+    const sizesContainer = document.getElementById("sizes-piece");
+    sizesContainer.innerHTML = '';  // Clear previous sizes
+
+    // Iterate over the sizes array and create buttons for each size
+    sizes.forEach(size => {
+        let btn = document.createElement('button');
+        btn.className = "btn btn-dark rounded size-btn";
+        btn.innerText = size;  // Show the size, e.g., "10x10x2"
+        sizesContainer.appendChild(btn);
+    });
+}
+
+
+
+        async function calculateBudget() {
+            const area = document.getElementById("area-input").value;
+            const discount = document.getElementById("discount-checkbox").checked;
+
+            // Show loading indicator
+            document.getElementById("loading-indicator").classList.remove("d-none");
+
+            const response = await fetch('http://localhost:8000/api/budgets/calculate_budget/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    piece_id: selectedPiece.id,
+                    size: selectedSize,
+                    color: selectedColor,
+                    area: area,
+                    discount: discount,
+                }),
+            });
+
+            const data = await response.json();
+            // Display the results
+            document.getElementById("total-pieces").innerText = `Total Pieces: ${data.total_q}`;
+            document.getElementById("total-price").innerText = `Total (before discount): $${data.total}`;
+            document.getElementById("net-price").innerText = `Net Total (after discount): $${data.net_total}`;
+            document.getElementById("result").classList.remove("d-none");
+
+            // Hide loading indicator
+            document.getElementById("loading-indicator").classList.add("d-none");
+        }
+
+        // Botón "Volver"
+        document.getElementById("go-back-btn").addEventListener("click", () => {
+            document.getElementById("pieceContainer").classList.remove("d-none");
+            document.getElementById("pieceDetailContainer").classList.add("d-none");
         });
 
-        // Agregar la imagen del logo como la última columna
-        let logoDiv = document.createElement('div');
-        logoDiv.className = "p-2 col-3 text-center"; // Ocupa una columna similar a las piezas
-
-        let logoImg = document.createElement('img');
-        logoImg.src = "https://www.vimacon.com/wp-content/uploads/2024/08/logovimacon.png"; 
-        logoImg.alt = "VIMACON Suelos de barro artesanal";
-        logoImg.className = "logo-img img-fluid";
-
-        logoDiv.appendChild(logoImg);
-        pieceContainer.appendChild(logoDiv);
-    }
-    
-    function selectPiece(selectedImg, pieceId) {
-        // Eliminar selección previa
-        document.querySelectorAll('.piece-img').forEach(img => img.classList.remove('selected'));
-        
-        // Marcar imagen seleccionada
-        selectedImg.classList.add('selected');
-
-        // Guardar el ID de la pieza seleccionada
-        window.selectedPieceId = pieceId;
-    }
-
-    // Cargar piezas al iniciar
-    window.onload = loadPieces;
-    </script>       
+        // Cargar piezas al iniciar
+        window.onload = loadPieces;
+    </script>
 </body>
 </html>
