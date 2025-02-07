@@ -17,7 +17,7 @@
             color: #D4506B;
         }
         .piece-img {
-            width: 120px;
+            width: 280px;
             margin: 10px;
             cursor: pointer;
             transition: transform 0.2s ease-in-out;
@@ -35,8 +35,8 @@
 <body class="bg-dark m-0 p-0">
     <div class="container-fluid m-0 p-0" id="view-1">
         <div class="row align-items-center justify-content-center bg-white m-0 p-4">
-            <h1 class="text-dark text-center">Piezas</h1>
-            <div id="pieceContainer" class="d-flex flex-wrap justify-content-center"></div>
+            <h3 class="text-dark pt-3">Piezas</h3>
+            <div id="pieceContainer" class="d-flex flex-wrap justify-content-center p-4"></div>
         </div>
     </div>
 
@@ -54,7 +54,7 @@
     
         data.forEach(piece => {
             let pieceDiv = document.createElement('div');
-            pieceDiv.className = "p-2";
+            pieceDiv.className = "p-2 col-3 text-center";
 
             let img = document.createElement('img');
             img.src = `${piece.image}`; // Asegúrate de que la URL sea correcta
