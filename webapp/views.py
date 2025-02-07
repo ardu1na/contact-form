@@ -10,7 +10,7 @@ from webapp.models import Client, Piece, Product, Budget
 class PieceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Piece
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'image', 'panio_image']
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -18,7 +18,7 @@ class ProductSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Product
-        fields = ['id', 'piece', 'image', 'size', 'pps', 'price', 'color']
+        fields = ['id', 'piece', 'size', 'pps', 'price', 'color']
 
 
 class BudgetSerializer(serializers.ModelSerializer):
@@ -85,10 +85,10 @@ class BudgetViewSet(viewsets.ModelViewSet):
         
         total_q = product.pps * int(area)
         total = total_q * product.price
-        #net_total = product.net_total
+        net_total = total * (Decimal("1") - discount / Decimal("100"))
 
         return Response({
             'total_q': total_q,
             'total': total,
-            #'net_total': net_total
+            'net_total': net_total
         })

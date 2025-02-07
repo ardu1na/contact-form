@@ -2,10 +2,18 @@ from django.contrib import admin
 
 from webapp.models import Piece, Product, Client, Budget
 
-
-admin.site.register(Piece)
-admin.site.register(Product)
 admin.site.register(Client)
+
+class ProductInline(admin.TabularInline):  
+    model = Product
+    extra = 1
+admin.site.register(Product)
+
+
+
+class PieceAdmin(admin.ModelAdmin):
+    inlines = [ProductInline]
+admin.site.register(Piece, PieceAdmin)
 
 
 class BudgetAdmin(admin.ModelAdmin):

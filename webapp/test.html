@@ -98,7 +98,7 @@
             
             const data = await response.json();
             document.getElementById('result').innerText = response.ok ? 
-                `Total de piezas: ${data.total_q}\nTotal en euros: ${data.total}` : 
+                `Total de piezas: ${data.total_q}\nTotal en euros: ${data.total} \n Total con descuento: ${data.net_total}` : 
                 `Error: ${data.error}`;
         }
         
