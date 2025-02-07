@@ -25,9 +25,15 @@
     <input type="number" id="area" placeholder="Área en m²" disabled>
     
     <button onclick="calculateBudget()" disabled>Calcular Presupuesto</button>
-    
+
     <h3>Resultado:</h3>
     <p id="result"></p>
+
+    <h3>Aplicar descuento del 10%</h3>
+    <input type="checkbox" id="applyDiscount" onchange="applyDiscount()" disabled> Aplicar descuento
+
+    <h3>Total con Descuento:</h3>
+    <p id="discountedTotal"></p>
     
     <script>
         async function loadPieces() {
@@ -97,11 +103,38 @@
             });
             
             const data = await response.json();
-            document.getElementById('result').innerText = response.ok ? 
-                `Total de piezas: ${data.total_q}\nTotal en euros: ${data.total} \n Total con descuento: ${data.net_total}` : 
-                `Error: ${data.error}`;
+            if (response.ok) {
+                document.getElementById('result').innerText = 
+                    `Total de piezas: ${data.total_q}\nTotal en euros: ${data.total}`;
+                
+                // Habilitar el checkbox de descuento
+                document.getElementById('applyDiscount').disabled = false;
+                
+                // Mostrar total sin descuento
+                document.getElementById('discountedTotal').innerText = "";
+            } else {
+                document.getElementById('result').innerText = `Error: ${data.error}`;
+            }
         }
-        
+
+        function applyDiscount() {
+            const applyDiscount = document.getElementById('applyDiscount').checked;
+            const resultText = document.getElementById('result').innerText;
+            
+            if (!resultText.includes("Total en euros")) return;
+            
+            const totalMatch = resultText.match(/Total en euros: (\d+(\.\d+)?)/);
+            if (!totalMatch) return;
+            
+            const total = parseFloat(totalMatch[1]);
+            const discount = applyDiscount ? total * 0.10 : 0;
+            const netTotal = total - discount;
+
+            document.getElementById('discountedTotal').innerText = applyDiscount 
+                ? `Total con descuento: ${netTotal.toFixed(2)}`
+                : "";
+        }
+
         loadPieces();
     </script>
 </body>
