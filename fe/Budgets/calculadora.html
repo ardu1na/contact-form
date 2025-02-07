@@ -29,6 +29,10 @@
             border: 3px solid #D4506B;
             border-radius: 10px;
         }
+        .logo-img {
+            width: 250px;
+            margin: 10px;
+        }
     </style>
 
 </head>
@@ -36,7 +40,7 @@
     <div class="container-fluid m-0 p-0" id="view-1">
         <div class="row align-items-center justify-content-center bg-white m-0 p-4">
             <h3 class="text-dark pt-3">Piezas</h3>
-            <div id="pieceContainer" class="d-flex flex-wrap justify-content-center p-4"></div>
+            <div id="pieceContainer" class="row d-flex flex-wrap justify-content-center p-4"></div>
         </div>
     </div>
 
@@ -51,7 +55,8 @@
         const pieceContainer = document.getElementById('pieceContainer');
         
         pieceContainer.innerHTML = ''; // Limpiar contenido previo
-    
+
+        // Añadir cada pieza como una columna de Bootstrap
         data.forEach(piece => {
             let pieceDiv = document.createElement('div');
             pieceDiv.className = "p-2 col-3 text-center";
@@ -66,6 +71,18 @@
             pieceDiv.appendChild(img);
             pieceContainer.appendChild(pieceDiv);
         });
+
+        // Agregar la imagen del logo como la última columna
+        let logoDiv = document.createElement('div');
+        logoDiv.className = "p-2 col-3 text-center"; // Ocupa una columna similar a las piezas
+
+        let logoImg = document.createElement('img');
+        logoImg.src = "https://www.vimacon.com/wp-content/uploads/2024/08/logovimacon.png"; 
+        logoImg.alt = "VIMACON Suelos de barro artesanal";
+        logoImg.className = "logo-img img-fluid";
+
+        logoDiv.appendChild(logoImg);
+        pieceContainer.appendChild(logoDiv);
     }
     
     function selectPiece(selectedImg, pieceId) {
