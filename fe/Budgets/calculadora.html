@@ -25,6 +25,16 @@
         .piece-img:hover {
             transform: scale(1.1);
         }
+
+        .color-img {
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+        .color-img:hover {
+            transform: scale(1.1);
+        }
+
+
         .selected {
             border: 3px solid #D4506B;
             border-radius: 10px;
@@ -60,23 +70,25 @@
                     <h3 class="fw-bold">Medidas</h3>
                     <h5>altura - anchura - grosor</h5>
                     <div id="sizes-piece" class="d-flex flex-wrap"></div>
-                </div>
-
-                <!-- Una vez que elusuario seleccionó una medida, ocultar el resto de las medidas y mostrar el siguiente panel para que elija el color-->
-                <div class="col-12 col-md-8 d-none" id="select-color">
-                    <h3 class="fw-bold">Elige color</h3>
-                    <div class="row align-items-center justify-content-center">
-                        <div class="col-4">
-                            <img src="/home/g5/Documentos/code/projects/seorural/vimacon/backend/fe/img/btn-rojo.png" class="img-fluid" id="rojo" />
-                        </div>
-                        <div class="col-4">
-                            <img src="/home/g5/Documentos/code/projects/seorural/vimacon/backend/fe/img/btn-pizarra.png" class="img-fluid" id="pizarra" />
-                        </div>
-                        <div class="col-4">
-                            <img src="/home/g5/Documentos/code/projects/seorural/vimacon/backend/fe/img/btn-salmon.png" class="img-fluid" id="salmon" />
+                        
+                    <div class="d-none mt-4" id="select-color">
+                        <h3 class="fw-bold">Elige color</h3>
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col-4">
+                                <img src="/home/g5/Documentos/code/projects/seorural/vimacon/backend/fe/img/btn-rojo.png" class="img-fluid color-img" id="rojo" />
+                            </div>
+                            <div class="col-4">
+                                <img src="/home/g5/Documentos/code/projects/seorural/vimacon/backend/fe/img/btn-pizarra.png" class="img-fluid color-img" id="pizarra" />
+                            </div>
+                            <div class="col-4">
+                                <img src="/home/g5/Documentos/code/projects/seorural/vimacon/backend/fe/img/btn-salmon.png" class="img-fluid color-img" id="salmon" />
+                            </div>
                         </div>
                     </div>
+                    
                 </div>
+
+                
             
 
 
@@ -235,5 +247,6 @@
         // Cargar piezas al iniciar
         window.onload = loadPieces;
     </script>
+    
 </body>
 </html>
