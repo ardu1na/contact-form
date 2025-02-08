@@ -57,11 +57,30 @@
                     <img id="selected-piece-img" class="img-fluid">
                 </div>
                 <div class="col-12 col-md-8">
-                    <h3>Medidas disponibles</h3>
-                    <h5>Altura - Anchura - Grosor</h5>
+                    <h3 class="fw-bold">Medidas</h3>
+                    <h5>altura - anchura - grosor</h5>
                     <div id="sizes-piece" class="d-flex flex-wrap"></div>
                 </div>
-                <div class="col-12 text-center mt-4">
+
+                <!-- Una vez que elusuario seleccionó una medida, ocultar el resto de las medidas y mostrar el siguiente panel para que elija el color-->
+                <div class="col-12 col-md-8 d-none" id="select-color">
+                    <h3 class="fw-bold">Elige color</h3>
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-4">
+                            <img src="/home/g5/Documentos/code/projects/seorural/vimacon/backend/fe/img/btn-rojo.png" class="img-fluid" id="rojo" />
+                        </div>
+                        <div class="col-4">
+                            <img src="/home/g5/Documentos/code/projects/seorural/vimacon/backend/fe/img/btn-pizarra.png" class="img-fluid" id="pizarra" />
+                        </div>
+                        <div class="col-4">
+                            <img src="/home/g5/Documentos/code/projects/seorural/vimacon/backend/fe/img/btn-salmon.png" class="img-fluid" id="salmon" />
+                        </div>
+                    </div>
+                </div>
+            
+
+
+                <div class="col-12 mt-4">
                     <button id="go-back-btn" class="btn btn-danger rounded">Volver</button>
                 </div>
             </div>
@@ -141,22 +160,37 @@
     // Get and display the available sizes for the selected piece
     const response = await fetch(`http://localhost:8000/api/products/sizes/?piece_id=${piece.id}`);
     const data = await response.json();
-    console.log(data);  // Log the response to see the structure
     
-    // Access the 'sizes' array directly
-    const sizes = data.sizes;  // data.sizes is already an array
-
+    const sizes = data.sizes;
     const sizesContainer = document.getElementById("sizes-piece");
     sizesContainer.innerHTML = '';  // Clear previous sizes
 
-    // Iterate over the sizes array and create buttons for each size
     sizes.forEach(size => {
         let btn = document.createElement('button');
         btn.className = "btn btn-dark rounded size-btn";
-        btn.innerText = size;  // Show the size, e.g., "10x10x2"
+        btn.innerText = size;
+        
+        btn.addEventListener("click", () => {
+            selectedSize = size;  // Store the selected size
+            console.log("Selected Size:", selectedSize);  // Log the selected size
+
+            // Hide all size buttons except the selected one
+            document.querySelectorAll(".size-btn").forEach(button => {
+                if (button.innerText !== selectedSize) {
+                    button.classList.add("d-none");
+                } else {
+                    button.classList.add("btn-success"); // Highlight selected size
+                }
+            });
+
+            // Show the color selection panel
+            document.getElementById("select-color").classList.remove("d-none");
+        });
+
         sizesContainer.appendChild(btn);
     });
 }
+
 
 
 
