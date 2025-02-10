@@ -87,25 +87,17 @@
                         </div>
                     </div>
 
-                    <!-- Una vez que el usuario ha elegido la pieza, la medida y el color, ocultar el div 'select-color' 
-                            y mostrar esto -->
+                  
+
+                 
 
                     <div class="d-none mt-4" id="input-area">
                         <h3 class="fw-bold">Superficie a instalar:</h3>  
-                        <input type="number" id="area"><span class="fs-5">- m2</span>
-                            
-
+                        <input type="number" id="area" class="form-control w-50 d-inline" oninput="validateAreaInput()">
+                        <span class="fs-5"> m²</span>
+                        <br>
+                        <button id="calculate-btn" class="btn btn-success mt-3" onclick="calculateBudget()" disabled>Calcular Presupuesto</button>
                     </div>
-
-
-                    <!-- Input de Área -->
-                <div class="d-none mt-4" id="input-area">
-                    <h3 class="fw-bold">Superficie a instalar:</h3>  
-                    <input type="number" id="area" class="form-control w-50 d-inline" min="0.1" step="0.1" oninput="validateAreaInput()">
-                    <span class="fs-5"> m²</span>
-                    <br>
-                    <button id="calculate-btn" class="btn btn-success mt-3" onclick="calculateBudget()" disabled>Calcular Presupuesto</button>
-                </div>
 
                 </div>
 
@@ -253,8 +245,8 @@ function validateAreaInput() {
 
 
         async function calculateBudget() {
-            const area = document.getElementById("area-input").value;
-            const discount = document.getElementById("discount-checkbox").checked;
+            const area = document.getElementById("area").value;
+            // const discount = document.getElementById("discount-checkbox").checked;
 
             // Show loading indicator
             document.getElementById("loading-indicator").classList.remove("d-none");
@@ -269,7 +261,7 @@ function validateAreaInput() {
                     size: selectedSize,
                     color: selectedColor,
                     area: area,
-                    discount: discount,
+                    // discount: discount,
                 }),
             });
 
@@ -277,7 +269,7 @@ function validateAreaInput() {
             // Display the results
             document.getElementById("total-pieces").innerText = `Total Pieces: ${data.total_q}`;
             document.getElementById("total-price").innerText = `Total (before discount): $${data.total}`;
-            document.getElementById("net-price").innerText = `Net Total (after discount): $${data.net_total}`;
+            //document.getElementById("net-price").innerText = `Net Total (after discount): $${data.net_total}`;
             document.getElementById("result").classList.remove("d-none");
 
             // Hide loading indicator
