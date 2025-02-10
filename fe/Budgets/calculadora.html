@@ -66,6 +66,7 @@
                 <div class="col-12 col-md-4 text-center">
                     <img id="selected-piece-img" class="img-fluid">
                 </div>
+
                 <div class="col-12 col-md-8">
                     <h3 class="fw-bold">Medidas</h3>
                     <h5>altura - anchura - grosor</h5>
@@ -85,7 +86,27 @@
                             </div>
                         </div>
                     </div>
-                    
+
+                    <!-- Una vez que el usuario ha elegido la pieza, la medida y el color, ocultar el div 'select-color' 
+                            y mostrar esto -->
+
+                    <div class="d-none mt-4" id="input-area">
+                        <h3 class="fw-bold">Superficie a instalar:</h3>  
+                        <input type="number" id="area"><span class="fs-5">- m2</span>
+                            
+
+                    </div>
+
+
+                    <!-- Input de Área -->
+                <div class="d-none mt-4" id="input-area">
+                    <h3 class="fw-bold">Superficie a instalar:</h3>  
+                    <input type="number" id="area" class="form-control w-50 d-inline" min="0.1" step="0.1" oninput="validateAreaInput()">
+                    <span class="fs-5"> m²</span>
+                    <br>
+                    <button id="calculate-btn" class="btn btn-success mt-3" onclick="calculateBudget()" disabled>Calcular Presupuesto</button>
+                </div>
+
                 </div>
 
                 
@@ -120,6 +141,16 @@
         let selectedPiece = null;
         let selectedSize = '';
         let selectedColor = '';
+
+    document.querySelectorAll(".color-img").forEach(colorImg => {
+        colorImg.addEventListener("click", function () {
+            selectedColor = this.id;  // Guardar color seleccionado
+            console.log("Color seleccionado:", selectedColor);  // Mostrar en consola
+
+            document.getElementById("select-color").classList.add("d-none"); // Ocultar selección de color
+            document.getElementById("input-area").classList.remove("d-none"); // Mostrar input de área
+        });
+    });
 
         async function loadPieces() {
             document.getElementById("loading-indicator").classList.remove("d-none"); // Show loading indicator
@@ -204,6 +235,21 @@
 }
 
 
+function enableAreaInput() {
+    const inputArea = document.getElementById("input-area");
+    inputArea.classList.remove("d-none");
+}
+
+function validateAreaInput() {
+    const areaInput = document.getElementById("area");
+    const calculateBtn = document.getElementById("calculate-btn");
+
+    if (areaInput.value > 0) {
+        calculateBtn.disabled = false;
+    } else {
+        calculateBtn.disabled = true;
+    }
+}
 
 
         async function calculateBudget() {
@@ -247,6 +293,7 @@
         // Cargar piezas al iniciar
         window.onload = loadPieces;
     </script>
+   
     
 </body>
 </html>
